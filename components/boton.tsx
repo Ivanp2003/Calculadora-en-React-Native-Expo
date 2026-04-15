@@ -1,5 +1,6 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent } from "react-native";// Para crear botones táctiles y estilos
+import { Colors } from '../constants/theme'; // Importa los colores definidos 
 
 import * as Haptics from 'expo-haptics';// Importa el módulo de vibración de Expo para proporcionar retroalimentación táctil al presionar los botones
 
@@ -14,9 +15,9 @@ type AccionarBotonProps = {
 const AccionarBoton: React.FC<AccionarBotonProps> = ({
   label,
   onPress,
-  color = "#2D2D2D",
+  color = Colors.darkGray,
   wide = false,
-  textColor = "#FFFFFF",
+  textColor = Colors.textPrimary,
 }) => {
   return (
     <TouchableOpacity
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: "center", // Centra el contenido verticalmente
   },
   text: {
-    color: '#FFFFFF',
+    color:  Colors.textPrimary, // color del texto por defecto
     fontSize: 28,
     fontWeight: '400',
   },

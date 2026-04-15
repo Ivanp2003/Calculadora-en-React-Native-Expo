@@ -1,5 +1,4 @@
 import { Colors } from "@/constants/theme";
-import { Slot } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
@@ -72,10 +71,37 @@ const RootLayout = () => {
       return;
     }
 
+   // borrar último carácter
+    if (value === "del") {
+      setInput((prev) => prev.slice(0, -1));
+      return;
+    } 
+
+    //cambiar el signo del último número
+    if (value === "+/-") {
+      setInput((prev) => {
+        // Busca el último número en el input
+        const match = prev.match(/(-?\d+\.?\d*)$/);
+
+        if (!match) return prev;
+
+        const lastNumber = match[0];
+        const startIndex = match.index ?? 0;
+
+        // Si empieza con "-" lo quitamos, si no lo agregamos
+        const toggled =
+          lastNumber.startsWith("-")
+            ? lastNumber.replace("-", "")
+            : "-" + lastNumber;
+
+        return prev.slice(0, startIndex) + toggled;
+      });
+      return;
+    }
+
 const mappedValue = mapOperator(value);
     setInput((prev) => prev + mappedValue);
   };
-
 
   return (
     <View style={styles.container}>
@@ -84,10 +110,10 @@ const mappedValue = mapOperator(value);
 
       {/* FILA 1 */}
       <View style={styles.row}>
-        <AccionarBoton label="C" color="#9B9B9B" textColor="#000000" onPress={() => handlePress("C")}/> 
-        <AccionarBoton label="+/-" color="#9B9B9B"  textColor="#000000" onPress={() => handlePress("+/-")}/>
-        <AccionarBoton label="del" color="#9B9B9B" textColor="#000000" onPress={() => handlePress("del")}/>
-        <AccionarBoton label="÷" color="#FF9427" onPress={() => handlePress("÷")}/>
+        <AccionarBoton label="C" color={Colors.lightGray} textColor={Colors.textSecondary} onPress={() => handlePress("C")}/> 
+        <AccionarBoton label="+/-" color={Colors.lightGray}  textColor={Colors.textSecondary} onPress={() => handlePress("+/-")}/>
+        <AccionarBoton label="del" color={Colors.lightGray} textColor={Colors.textSecondary} onPress={() => handlePress("del")}/>
+        <AccionarBoton label="÷" color={Colors.orange} onPress={() => handlePress("÷")}/>
       </View>
 
       {/* FILA 2 */}
@@ -95,7 +121,7 @@ const mappedValue = mapOperator(value);
         <AccionarBoton label="7" onPress={() => handlePress("7")}/>
         <AccionarBoton label="8" onPress={() => handlePress("8")}/>
         <AccionarBoton label="9" onPress={() => handlePress("9")}/>
-        <AccionarBoton label="×" color="#FF9427" onPress={() => handlePress("×")}/>
+        <AccionarBoton label="×" color={Colors.orange} onPress={() => handlePress("×")}/>
       </View>
 
       {/* FILA 3 */}
@@ -103,7 +129,7 @@ const mappedValue = mapOperator(value);
         <AccionarBoton label="4" onPress={() => handlePress("4")}/>
         <AccionarBoton label="5" onPress={()=> handlePress("5")}/>
         <AccionarBoton label="6" onPress={() => handlePress("6")}/>
-        <AccionarBoton label="-" color="#FF9427" onPress={() => handlePress("-")}/>
+        <AccionarBoton label="-" color={Colors.orange} onPress={() => handlePress("-")}/>
       </View>
 
       {/* FILA 4 */}
@@ -111,14 +137,14 @@ const mappedValue = mapOperator(value);
         <AccionarBoton label="1" onPress={() => handlePress("1")}/>
         <AccionarBoton label="2" onPress={() => handlePress("2")}/>
         <AccionarBoton label="3" onPress={() => handlePress("3")}/>
-        <AccionarBoton label="+" color="#FF9427" onPress={() => handlePress("+")}/>
+        <AccionarBoton label="+" color={Colors.orange} onPress={() => handlePress("+")}/>
       </View>
 
       {/* FILA 5 */}
       <View style={styles.row}>
         <AccionarBoton label="0" wide onPress={() => handlePress("0")}/>
         <AccionarBoton label="." onPress={() => handlePress(".")}/>
-        <AccionarBoton label="=" color="#FF9427" onPress={() => handlePress("=")}/>
+        <AccionarBoton label="=" color={Colors.orange} onPress={() => handlePress("=")}/>
       </View>
       <StatusBar style="light" />
     </View>
@@ -139,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   input:{
-    color: "#FFFFFF",
+    color: Colors.textPrimary,
     textAlign:"right",
     width: "100%",
     fontSize: 60,
@@ -147,7 +173,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   header: {
-    color:"#666666",
+    color: Colors.textSecondary,
     fontSize: 36,
     textAlign: "right",
     width: "100%",
